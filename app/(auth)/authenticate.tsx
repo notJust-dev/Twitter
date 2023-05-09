@@ -9,10 +9,13 @@ import {
 import React, { useState } from 'react';
 import { useSearchParams } from 'expo-router';
 import { authenticate } from '../../lib/api/auth';
+import { useAuth } from '../../context/AuthContext';
 
-const SignIn = () => {
+const Authenticate = () => {
   const [code, setCode] = useState('');
   const { email } = useSearchParams();
+
+  const { setAuthToken } = useAuth();
 
   const onConfirm = async () => {
     if (typeof email !== 'string') {
@@ -20,7 +23,7 @@ const SignIn = () => {
     }
     try {
       const res = await authenticate({ email, emailToken: code });
-      console.log(res);
+      setAuthToken(res.authToken);
     } catch (e) {
       Alert.alert('Error', "Email code doesn't match");
     }
@@ -82,4 +85,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignIn;
+export default Authenticate;
