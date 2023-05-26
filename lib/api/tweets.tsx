@@ -12,7 +12,7 @@ import { useAuth } from '../../context/AuthContext';
 const TweetsApiContext = createContext({});
 
 const TweetsApiContextProvider = ({ children }: PropsWithChildren) => {
-  const { authToken } = useAuth();
+  const { authToken, removeAuthToken } = useAuth();
 
   const listTweets = async () => {
     if (!authToken) {
@@ -25,6 +25,7 @@ const TweetsApiContextProvider = ({ children }: PropsWithChildren) => {
       },
     });
     if (res.status === 401) {
+      removeAuthToken();
       throw new Error('Not authorized. Please sign in');
     }
     if (res.status !== 200) {
